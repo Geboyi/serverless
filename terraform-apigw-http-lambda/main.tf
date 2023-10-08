@@ -1,6 +1,3 @@
-provider "aws" {
-  region = "eu-west-1"
-}
 
 ####################################################
 # Lambda Function (building from source)
@@ -13,7 +10,7 @@ module "lambda_function" {
   function_name = "${random_pet.this.id}-lambda"
   description   = "My awesome lambda function"
   handler       = "index.lambda_handler"
-  runtime       = "python3.8"
+  runtime       = "python3.11"
   publish       = true
 
   source_path = "${path.module}/../terraform-fixtures/python"
