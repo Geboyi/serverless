@@ -38,9 +38,6 @@ jobs:
         with:
           python-version: 3.11  # Set your desired Python version here
 
-      - name: Install dependencies (if needed)
-        run: pip install -r requirements.txt  # Adjust for your project's requirements
-
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
         with:
