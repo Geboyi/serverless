@@ -1,0 +1,52 @@
+name: Post-Serverless Deployment AWS
+
+on:
+  workflow_dispatch:
+   # Inputs the workflow accepts.
+    inputs:
+      tfpath:
+        description: 'TF File Path'
+        #required: false  # To ensure consistency and avoid potential issues
+        #caused by missing input prior to running manually.
+        #default:
+jobs:
+  post-deploy:
+    name: destroy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3  # This step checks out our repository code
+
+    - name: Configure AWS Credentials Action For GitHub Actions
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.5.7  # Adjust to latest Terraform version
+
+    - name: Terraform-apigw-http-lambda-destroy
+      working-directory: ./terraform-apigw-http-lambda/
+      run: |
+        terraform init  # Initialize Terraform configuration
+        terraform destroy --auto-approve  # Destroy terraform code 
+
+    - name: Terraform-s3-lambda-destroy
+      working-directory: ./terraform-s3-lambda/
+      run: |
+        terraform init  # Initialize Terraform configuration
+        terraform destroy --auto-approve  # Destroy terraform code
+
+    - name: Terraform-eventbridge-scheduled-lambda-destroy
+      working-directory: ./terraform-eventbridge-scheduled-lambda/
+      run: |
+        terraform init  # Initialize Terraform configuration
+        terraform destroy --auto-approve  # Destroy terraform code
+
+    - name: Notify team
+      run: echo "Deployment successfully." #Notification
