@@ -34,18 +34,21 @@ jobs:
       working-directory: ./terraform-apigw-http-lambda/
       run: |
         terraform init  # Initialize Terraform configuration
+        terraform validate 
         terraform destroy --auto-approve  # Destroy terraform code 
 
     - name: Terraform-s3-lambda-destroy
       working-directory: ./terraform-s3-lambda/
       run: |
         terraform init  # Initialize Terraform configuration
+        terraform validate
         terraform destroy --auto-approve  # Destroy terraform code
 
     - name: Terraform-eventbridge-scheduled-lambda-destroy
       working-directory: ./terraform-eventbridge-scheduled-lambda/
       run: |
         terraform init  # Initialize Terraform configuration
+        terraform validate
         terraform destroy --auto-approve  # Destroy terraform code
 
     - name: Notify team
